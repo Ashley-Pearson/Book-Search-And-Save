@@ -8,11 +8,7 @@ const db = require('./config/connection');
 
 const app = express();
 const PORT = process.env.PORT || 3001;
-const server = new ApolloServer({
-  typeDefs,
-  resolvers,
-  context: authMiddleware,
-});
+
 
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
@@ -27,7 +23,13 @@ app.get('/', (req, res) => {
 });
 
 //New instance of Apollo with graphql
-const startApolloServer =async (typeDefs, resolvers) => {
+const startApolloServer = async (typeDefs, resolvers) => {
+  const server = new ApolloServer({
+    typeDefs,
+    resolvers,
+    context: authMiddleware,
+  });
+
   await server.start();
   server.applyMiddleware({ app });
   
